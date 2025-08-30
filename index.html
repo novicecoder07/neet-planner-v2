@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Study Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .plan-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .subject-card {
+            background-color: #f0f4f8;
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        input[readonly] {
+            background-color: #e2e8f0;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+    <header class="bg-indigo-600 text-white p-4 text-center shadow-lg">
+        <h1 class="text-3xl font-bold">Personalized Study Planner</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 flex flex-col items-center">
+        <div class="w-full plan-card p-6 md:p-8 mt-8">
+            <h2 class="text-2xl font-semibold mb-6 text-gray-800">Generate Your Study Plan</h2>
+            <form id="planner-form" class="space-y-6">
+                <div>
+                    <label for="start_date" class="block text-gray-700 font-medium mb-1">Start Date</label>
+                    <input type="date" id="start_date" name="start_date" required readonly
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="student_status" class="block text-gray-700 font-medium mb-1">Student Status</label>
+                    <select id="student_status" name="student_status" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="11th">11th</option>
+                        <option value="12th">12th</option>
+                        <option value="Dropper">Dropper</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="strong_subject" class="block text-gray-700 font-medium mb-1">Strong Subject</label>
+                    <select id="strong_subject" name="strong_subject" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="weak_subject" class="block text-gray-700 font-medium mb-1">Weak Subject</label>
+                    <select id="weak_subject" name="weak_subject" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="hours_commitment" class="block text-gray-700 font-medium mb-1">Daily Hours Commitment</label>
+                    <select id="hours_commitment" name="hours_commitment" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="4">4 hours</option>
+                        <option value="6">6 hours</option>
+                        <option value="8" selected>8 hours</option>
+                        <option value="10">10 hours</option>
+                        <option value="12">12 hours</option>
+                    </select>
+                </div>
+                <button type="submit"
+                    class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Generate Plan
+                </button>
+            </form>
+        </div>
+
+        <!-- Plan Display Area -->
+        <div id="plan-display-area" class="w-full plan-card p-6 md:p-8 mt-8 hidden">
+            <h2 class="text-2xl font-semibold mb-6 text-gray-800">Your Study Plan</h2>
+            <div id="plan-content"></div>
+        </div>
+
+        <!-- Error Message Area -->
+        <div id="error-message-area" class="w-full plan-card p-6 md:p-8 mt-8 hidden bg-red-100 border border-red-400 text-red-700 rounded-md">
+            <p id="error-message"></p>
+        </div>
+        
+    </main>
+    
+    <footer class="bg-gray-800 text-white text-center p-4 mt-8">
+        <p>&copy; 2025 Personalized Study Planner</p>
+    </footer>
+
+    <script>
+        // Set today's date for the start_date input
+        window.onload = function() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const dd = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('start_date').value = formattedDate;
+        };
+
+        document.getElementById('planner-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            // Hide previous results
+            document.getElementById('plan-display-area').classList.add('hidden');
+            document.getElementById('error-message-area').classList.add('hidden');
+            document.getElementById('plan-content').innerHTML = '';
+
+            const formData = new FormData(event.target);
+            const studentData = Object.fromEntries(formData.entries());
+
+            // API endpoint URL for your Cloud Run service
+            const apiUrl = 'https://neet-planner-v2-zjdwzps3xa-uc.a.run.app/plan'; // Replace with your actual URL
+
+            try {
+                // Display loading indicator
+                document.getElementById('plan-content').innerHTML = '<p class="text-center text-gray-500">Generating plan...</p>';
+                document.getElementById('plan-display-area').classList.remove('hidden');
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(studentData)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Something went wrong.');
+                }
+
+                // Render the plan to the UI
+                renderPlan(result.monthly_plan);
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('plan-display-area').classList.add('hidden');
+                document.getElementById('error-message').textContent = `Error: ${error.message}`;
+                document.getElementById('error-message-area').classList.remove('hidden');
+            }
+        });
+
+        function renderPlan(monthlyPlan) {
+            const planContent = document.getElementById('plan-content');
+            planContent.innerHTML = ''; // Clear loading text
+
+            monthlyPlan.forEach(monthData => {
+                const monthSection = document.createElement('div');
+                monthSection.className = 'mb-8';
+                monthSection.innerHTML = `<h3 class="text-xl font-bold mb-4 text-gray-800">${monthData.month}</h3>`;
+
+                const subjects = monthData.subjects;
+                for (const type of ['New', 'Revision']) {
+                    const typeData = subjects[type];
+                    if (Object.keys(typeData).length > 0) {
+                         const typeHeading = document.createElement('h4');
+                        typeHeading.className = `text-lg font-semibold mt-4 mb-2 text-gray-700`;
+                        typeHeading.textContent = `${type} Chapters`;
+                        monthSection.appendChild(typeHeading);
+
+                        for (const subject of ['Physics', 'Chemistry', 'Biology']) {
+                            if (typeData[subject] && typeData[subject].length > 0) {
+                                const subjectCard = document.createElement('div');
+                                subjectCard.className = `subject-card border-indigo-500`;
+                                subjectCard.innerHTML = `<p class="font-bold text-lg">${subject}</p>`;
+                                const chapterList = document.createElement('ul');
+                                chapterList.className = 'list-disc ml-6 mt-2 text-gray-600';
+                                typeData[subject].forEach(chapter => {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = chapter;
+                                    chapterList.appendChild(listItem);
+                                });
+                                subjectCard.appendChild(chapterList);
+                                monthSection.appendChild(subjectCard);
+                            }
+                        }
+                    }
+                }
+                planContent.appendChild(monthSection);
+            });
+            document.getElementById('plan-display-area').classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>
