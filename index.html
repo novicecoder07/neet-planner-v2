@@ -140,7 +140,7 @@
             const studentData = Object.fromEntries(formData.entries());
 
             // API endpoint URL for your Cloud Run service
-            const apiUrl = 'https://neet-planner-v2-46074891914.us-central1.run.app/plan'; // CORRECTED URL
+            const apiUrl = 'https://neet-planner-v2-46074891914.us-central1.run.app/plan'; 
 
             try {
                 // Display loading indicator
@@ -157,13 +157,17 @@
 
                 const result = await response.json();
 
-                // CORRECTED: Check for the new 'status' field and explicit error message
+                // ROBUST ERROR HANDLING: Check for new 'status' or old 'error' key
                 if (result.status === 'error' || !response.ok) {
-                    throw new Error(result.message || 'An unknown error occurred.');
+                    throw new Error(result.message || result.error || 'An unknown error occurred.');
                 }
                 
-                // CORRECTED: Pass result.plan to the render function
-                renderPlan(result.plan);
+                // ROBUST PLAN HANDLING: Check for 'plan' key, fallback to 'monthly_plan'
+                const planData = result.plan || result.monthly_plan;
+                if (!planData) {
+                    throw new Error('Received a success response, but the plan data is missing.');
+                }
+                renderPlan(planData);
 
             } catch (error) {
                 console.error('Error:', error);
@@ -173,7 +177,7 @@
             }
         });
 
-        // CORRECTED: Function now expects the new `plan` structure
+        // Function now expects a valid plan array, regardless of the key it came from
         function renderPlan(monthlyPlan) {
             const planContent = document.getElementById('plan-content');
             planContent.innerHTML = ''; // Clear loading text
@@ -230,3 +234,4 @@
 </body>
 
 </html>
+
