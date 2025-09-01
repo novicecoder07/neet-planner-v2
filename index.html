@@ -23,7 +23,7 @@
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px
- 6px rgba(0, 0, 0, 0.1);
+            6px rgba(0, 0, 0, 0.1);
         }
 
         .subject-card {
@@ -52,7 +52,7 @@
             <form id="planner-form" class="space-y-6">
                 <div>
                     <label for="start_date" class="block text-gray-700 font-medium mb-1">Start Date</label>
-                    <input type="date" id="start_date" name="start_date" required
+                    <input type="date" id="start_date" name="start_date" required readonly
                         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
@@ -61,7 +61,7 @@
                         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="11th">11th</option>
                         <option value="12th">12th</option>
-                        <option value="Dropper" selected>Dropper</option>
+                        <option value="Dropper">Dropper</option>
                     </select>
                 </div>
                 <div>
@@ -83,7 +83,8 @@
                     </select>
                 </div>
                 <div>
-                    <label for="hours_commitment" class="block text-gray-700 font-medium mb-1">Daily Hours Commitment</label>
+                    <label for="hours_commitment" class="block text-gray-700 font-medium mb-1">Daily Hours
+                        Commitment</label>
                     <select id="hours_commitment" name="hours_commitment" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="4">4 hours</option>
@@ -93,8 +94,8 @@
                         <option value="12">12 hours</option>
                     </select>
                 </div>
-                <button type="submit"
-                    class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <button type="submit" id="generate-btn"
+                    class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300">
                     Generate Plan
                 </button>
             </form>
@@ -102,131 +103,128 @@
 
         <!-- Plan Display Area -->
         <div id="plan-display-area" class="w-full plan-card p-6 md:p-8 mt-8 hidden">
-            <h2 class="text-2xl font-semibold mb-6 text-gray-800">Your Study Plan</h2>
+            <h2 class="text-2xl font-semibold mb-6 text-gray-800">Your Weekly Study Plan</h2>
             <div id="plan-content"></div>
+            <div id="buffer-message" class="text-center text-sm text-gray-600 mt-6 italic font-medium"></div>
         </div>
 
         <!-- Error Message Area -->
-        <div id="error-message-area" class="w-full plan-card p-6 md:p-8 mt-8 hidden bg-red-100 border border-red-400 text-red-700 rounded-md">
+        <div id="error-message-area"
+            class="w-full plan-card p-6 md:p-8 mt-8 hidden bg-red-100 border border-red-400 text-red-700 rounded-md">
             <p id="error-message"></p>
         </div>
-        
+
     </main>
-    
+
     <footer class="bg-gray-800 text-white text-center p-4 mt-8">
         <p>&copy; 2025 Personalized Study Planner</p>
     </footer>
 
     <script>
         // Set today's date for the start_date input
-        window.onload = function() {
+        window.onload = function () {
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
             const dd = String(today.getDate()).padStart(2, '0');
-            const formattedDate = `${yyyy}-${mm}-${dd}`;
-            document.getElementById('start_date').value = formattedDate;
+            document.getElementById('start_date').value = `${yyyy}-${mm}-${dd}`;
         };
 
-        document.getElementById('planner-form').addEventListener('submit', async function(event) {
+        document.getElementById('planner-form').addEventListener('submit', async function (event) {
             event.preventDefault();
 
-            // Hide previous results
+            // UI feedback
+            const generateBtn = document.getElementById('generate-btn');
+            generateBtn.textContent = 'Generating...';
+            generateBtn.disabled = true;
             document.getElementById('plan-display-area').classList.add('hidden');
             document.getElementById('error-message-area').classList.add('hidden');
             document.getElementById('plan-content').innerHTML = '';
+            document.getElementById('buffer-message').innerHTML = '';
+
 
             const formData = new FormData(event.target);
             const studentData = Object.fromEntries(formData.entries());
 
             // API endpoint URL for your Cloud Run service
-            const apiUrl = 'https://neet-planner-v2-46074891914.us-central1.run.app/plan'; 
+            const apiUrl = 'https://neet-planner-v2-46074891914.us-central1.run.app/plan';
 
             try {
-                // Display loading indicator
-                document.getElementById('plan-content').innerHTML = '<p class="text-center text-gray-500">Generating plan...</p>';
-                document.getElementById('plan-display-area').classList.remove('hidden');
-
                 const response = await fetch(apiUrl, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(studentData)
                 });
 
                 const result = await response.json();
 
-                // ROBUST ERROR HANDLING: Check for new 'status' or old 'error' key
-                if (result.status === 'error' || !response.ok) {
-                    throw new Error(result.message || result.error || 'An unknown error occurred.');
+                // FIX: Robust error handling based on the 'status' key from the API
+                if (result.status !== 'success') {
+                    throw new Error(result.message || 'An unknown error occurred on the server.');
                 }
                 
-                // ROBUST PLAN HANDLING: Check for 'plan' key, fallback to 'monthly_plan'
-                const planData = result.plan || result.monthly_plan;
-                if (!planData) {
-                    throw new Error('Received a success response, but the plan data is missing.');
+                // FIX: Call the new render function for the weekly plan
+                renderWeeklyPlan(result.plan);
+
+                // FIX: Display the buffer period message
+                if (result.buffer_period) {
+                    document.getElementById('buffer-message').textContent = result.buffer_period;
                 }
-                renderPlan(planData);
 
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('plan-display-area').classList.add('hidden');
                 document.getElementById('error-message').textContent = `Error: ${error.message}`;
                 document.getElementById('error-message-area').classList.remove('hidden');
+            } finally {
+                generateBtn.textContent = 'Generate Plan';
+                generateBtn.disabled = false;
             }
         });
 
-        // Function now expects a valid plan array, regardless of the key it came from
-        function renderPlan(monthlyPlan) {
+        // FIX: Completely new function to render the weekly plan structure
+        function renderWeeklyPlan(weeklyPlan) {
             const planContent = document.getElementById('plan-content');
-            planContent.innerHTML = ''; // Clear loading text
+            planContent.innerHTML = ''; // Clear any previous content or loading text
 
-            if (!monthlyPlan || monthlyPlan.length === 0) {
-                 planContent.innerHTML = '<p class="text-center text-gray-500">No plan could be generated for the given inputs.</p>';
-                 return;
+            if (!weeklyPlan || weeklyPlan.length === 0) {
+                planContent.innerHTML = '<p class="text-center text-gray-500">No plan could be generated for the given timeline.</p>';
+                document.getElementById('plan-display-area').classList.remove('hidden');
+                return;
             }
+            
+            const subjectColors = {
+                'Physics': 'border-blue-500',
+                'Chemistry': 'border-green-500',
+                'Biology': 'border-pink-500'
+            };
 
-            monthlyPlan.forEach(monthData => {
-                const monthSection = document.createElement('div');
-                monthSection.className = 'mb-8';
-                monthSection.innerHTML = `<h3 class="text-xl font-bold mb-4 text-gray-800">${monthData.month}</h3>`;
+            weeklyPlan.forEach(weekData => {
+                const weekSection = document.createElement('div');
+                weekSection.className = 'mb-8';
+                weekSection.innerHTML = `<h3 class="text-xl font-bold mb-4 text-gray-800">${weekData.week}</h3>`;
 
-                const subjects = monthData.subjects;
-                for (const type of ['New', 'Revision']) {
-                    const typeData = subjects[type];
-                    if (Object.keys(typeData).length > 0) {
-                        const typeHeading = document.createElement('h4');
-                        typeHeading.className = `text-lg font-semibold mt-4 mb-2 text-gray-700`;
-                        typeHeading.textContent = `${type} Chapters`;
-                        monthSection.appendChild(typeHeading);
-
-                        for (const subject of ['Physics', 'Chemistry', 'Biology']) {
-                            if (typeData[subject] && typeData[subject].length > 0) {
-                                const subjectCard = document.createElement('div');
-                                // Added color coding for subjects
-                                const subjectColors = {
-                                    'Physics': 'border-blue-500',
-                                    'Chemistry': 'border-green-500',
-                                    'Biology': 'border-purple-500'
-                                }
-                                subjectCard.className = `subject-card ${subjectColors[subject] || 'border-indigo-500'}`;
-
-                                subjectCard.innerHTML = `<p class="font-bold text-lg">${subject}</p>`;
-                                const chapterList = document.createElement('ul');
-                                chapterList.className = 'list-disc ml-6 mt-2 text-gray-600';
-                                typeData[subject].forEach(chapter => {
-                                    const listItem = document.createElement('li');
-                                    listItem.textContent = chapter;
-                                    chapterList.appendChild(listItem);
-                                });
-                                subjectCard.appendChild(chapterList);
-                                monthSection.appendChild(subjectCard);
-                            }
-                        }
+                const tasksBySubject = weekData.tasks_by_subject;
+                if (Object.keys(tasksBySubject).length > 0) {
+                    for (const subject in tasksBySubject) {
+                        const subjectCard = document.createElement('div');
+                        const colorClass = subjectColors[subject] || 'border-gray-500';
+                        subjectCard.className = `subject-card ${colorClass}`;
+                        subjectCard.innerHTML = `<p class="font-bold text-lg text-gray-900">${subject}</p>`;
+                        
+                        const chapterList = document.createElement('ul');
+                        chapterList.className = 'list-disc ml-6 mt-2 text-gray-700 space-y-1';
+                        
+                        tasksBySubject[subject].forEach(taskText => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = taskText;
+                            chapterList.appendChild(listItem);
+                        });
+                        
+                        subjectCard.appendChild(chapterList);
+                        weekSection.appendChild(subjectCard);
                     }
                 }
-                planContent.appendChild(monthSection);
+                planContent.appendChild(weekSection);
             });
             document.getElementById('plan-display-area').classList.remove('hidden');
         }
