@@ -21,6 +21,11 @@
             color: #4f46e5;
             font-weight: 600;
         }
+        .subject-col h4 {
+             border-left-width: 4px;
+             padding-left: 0.75rem;
+             margin-bottom: 0.75rem;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -51,7 +56,6 @@
                     <label for="hours_commitment" class="block text-sm font-medium text-gray-600 mb-1">Daily Study Hours</label>
                     <input type="number" id="hours_commitment" name="hours_commitment" value="12" min="4" max="16" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
-                 <!-- NEW: Weakest and Strongest Subject Inputs -->
                 <div>
                     <label for="weak_subject" class="block text-sm font-medium text-gray-600 mb-1">Weakest Subject</label>
                     <select id="weak_subject" name="weak_subject" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
@@ -63,7 +67,6 @@
                 <div>
                     <label for="strong_subject" class="block text-sm font-medium text-gray-600 mb-1">Strongest Subject</label>
                     <select id="strong_subject" name="strong_subject" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                        {/* Options will be populated by JavaScript */}
                     </select>
                 </div>
                 <div class="md:col-span-2 lg:col-span-3 text-center lg:col-start-2">
@@ -74,7 +77,7 @@
             </form>
         </div>
 
-        <!-- Results Section (No changes needed here) -->
+        <!-- Results Section -->
         <div id="results-container" class="hidden">
             <div id="message-bar" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow" role="alert">
                 <p class="font-bold">Success!</p>
@@ -118,20 +121,19 @@
             const errorBar = document.getElementById('error-bar');
             const errorContent = document.getElementById('error-content');
             
-            // --- NEW: Get references to the subject dropdowns ---
             const weakSubjectSelect = document.getElementById('weak_subject');
             const strongSubjectSelect = document.getElementById('strong_subject');
             const allSubjects = ['Biology', 'Physics', 'Chemistry'];
+            const subjectColors = {
+                'Physics': 'border-blue-500 text-blue-700',
+                'Chemistry': 'border-green-500 text-green-700',
+                'Biology': 'border-pink-500 text-pink-700'
+            };
 
-            // --- NEW: Function to update the strong subject options ---
             function updateStrongSubjectOptions() {
                 const weakSubject = weakSubjectSelect.value;
                 const availableStrongSubjects = allSubjects.filter(s => s !== weakSubject);
-
-                // Clear existing options
                 strongSubjectSelect.innerHTML = '';
-
-                // Populate with new options
                 availableStrongSubjects.forEach(subject => {
                     const option = document.createElement('option');
                     option.value = subject;
@@ -140,25 +142,20 @@
                 });
             }
 
-            // --- NEW: Add event listener and call once on load ---
             weakSubjectSelect.addEventListener('change', updateStrongSubjectOptions);
-            updateStrongSubjectOptions(); // Initial population on page load
+            updateStrongSubjectOptions();
 
-            // Set default start date to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('start_date').value = today;
 
             form.addEventListener('submit', async function (e) {
                 e.preventDefault();
-                
                 resultsContainer.classList.add('hidden');
                 errorBar.classList.add('hidden');
                 messageBar.classList.add('hidden');
                 loader.classList.remove('hidden');
-
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
-
                 const apiUrl = 'https://neet-planner-v2-46074891914.us-central1.run.app/generate_plan';
                 
                 try {
@@ -167,29 +164,22 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data),
                     });
-
                     const result = await response.json();
-                    
                     loader.classList.add('hidden');
                     resultsContainer.classList.remove('hidden');
 
                     if (result.status === 'success') {
                         messageContent.textContent = result.message;
                         messageBar.classList.remove('hidden');
-                        
                         const { monthly_plan, weekly_plan, daily_plan } = result.plan;
-                        
                         renderMonthlyPlan(monthly_plan);
                         renderWeeklyPlan(weekly_plan);
                         renderDailyPlan(daily_plan);
-
                         switchTab('monthly');
-
                     } else {
                         errorContent.textContent = result.message || 'An unknown error occurred.';
                         errorBar.classList.remove('hidden');
                     }
-
                 } catch (error) {
                     loader.classList.add('hidden');
                     resultsContainer.classList.remove('hidden');
@@ -199,21 +189,27 @@
                 }
             });
             
-            // --- RENDERING FUNCTIONS (No changes) ---
-            
+            // --- NEW: RENDER FUNCTIONS WITH SUBJECT COLUMNS ---
             function renderMonthlyPlan(monthlyPlan) {
                 const container = document.getElementById('monthly-plan');
-                let html = '<h2 class="text-3xl font-bold mb-6 text-gray-800">Monthly Overview</h2>';
-                html += '<div class="space-y-6">';
+                let html = '<h2 class="text-3xl font-bold mb-6 text-gray-800">Monthly Overview</h2><div class="space-y-6">';
                 monthlyPlan.forEach(month => {
                     html += `
                         <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
                             <h3 class="text-xl font-semibold text-indigo-700 mb-4">${month.month}</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-gray-700">
-                                ${month.chapters.map(ch => `<li class="flex items-start"><svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${ch}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">`;
+                    allSubjects.forEach(subject => {
+                        const chapters = month.chapters_by_subject[subject] || [];
+                        html += `
+                            <div class="subject-col">
+                                <h4 class="font-semibold text-lg ${subjectColors[subject]}">${subject}</h4>
+                                ${chapters.length > 0 ? `
+                                <ul class="space-y-2 text-gray-700">
+                                    ${chapters.map(ch => `<li class="flex items-start text-sm"><svg class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${ch}</li>`).join('')}
+                                </ul>` : '<p class="text-sm text-gray-400 italic">No new chapters.</p>'}
+                            </div>`;
+                    });
+                    html += `</div></div>`;
                 });
                 html += '</div>';
                 container.innerHTML = html;
@@ -221,17 +217,24 @@
 
             function renderWeeklyPlan(weeklyPlan) {
                 const container = document.getElementById('weekly-plan');
-                let html = '<h2 class="text-3xl font-bold mb-6 text-gray-800">Weekly Chapter Goals</h2>';
-                html += '<div class="space-y-6">';
-                weeklyPlan.forEach(week => {
+                let html = '<h2 class="text-3xl font-bold mb-6 text-gray-800">Weekly Chapter Goals</h2><div class="space-y-6">';
+                 weeklyPlan.forEach(week => {
                     html += `
                         <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
                             <h3 class="text-xl font-semibold text-indigo-700 mb-4">${week.week}</h3>
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-gray-700">
-                                ${week.chapters.map(ch => `<li class="flex items-start"><svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>${ch}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">`;
+                    allSubjects.forEach(subject => {
+                        const chapters = week.chapters_by_subject[subject] || [];
+                        html += `
+                            <div class="subject-col">
+                                <h4 class="font-semibold text-lg ${subjectColors[subject]}">${subject}</h4>
+                                ${chapters.length > 0 ? `
+                                <ul class="space-y-2 text-gray-700">
+                                     ${chapters.map(ch => `<li class="flex items-start text-sm"><svg class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>${ch}</li>`).join('')}
+                                </ul>` : '<p class="text-sm text-gray-400 italic">No new chapters.</p>'}
+                            </div>`;
+                    });
+                    html += `</div></div>`;
                 });
                 html += '</div>';
                 container.innerHTML = html;
@@ -239,8 +242,7 @@
 
             function renderDailyPlan(dailyPlan) {
                 const container = document.getElementById('daily-plan');
-                 let html = '<h2 class="text-3xl font-bold mb-6 text-gray-800">Detailed Daily Schedule</h2>';
-                html += '<div class="space-y-8">';
+                let html = '<h2 class="text-3xl font-bold mb-6 text-gray-800">Detailed Daily Schedule</h2><div class="space-y-8">';
                 dailyPlan.forEach(week => {
                     html += `<div class="bg-white p-6 rounded-xl shadow border border-gray-200">`;
                     html += `<h3 class="text-2xl font-semibold text-indigo-700 mb-4">${week.week}</h3>`;
@@ -249,16 +251,24 @@
                         html += `
                             <div>
                                 <h4 class="text-lg font-semibold text-gray-600 border-b pb-2 mb-3">${day.day}</h4>
-                                <ul class="space-y-2">
-                                    ${day.tasks.map(task => `
-                                        <li class="flex justify-between items-center p-2 rounded-md ${task.type === 'Revision' ? 'bg-amber-50' : 'bg-blue-50'}">
-                                            <span class="text-gray-800">${task.task}</span>
-                                            <span class="font-medium text-sm ${task.type === 'Revision' ? 'text-amber-700' : 'text-blue-700'}">${task.hours.toFixed(2)} hrs</span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                        `;
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">`;
+                        allSubjects.forEach(subject => {
+                            const tasks = day.tasks_by_subject[subject] || [];
+                            html += `
+                                <div class="subject-col">
+                                    <h4 class="font-semibold text-lg ${subjectColors[subject]}">${subject}</h4>
+                                    ${tasks.length > 0 ? `
+                                    <ul class="space-y-2">
+                                        ${tasks.map(task => `
+                                            <li class="flex justify-between items-center p-2 rounded-md text-sm ${task.type === 'Revision' ? 'bg-amber-50' : 'bg-blue-50'}">
+                                                <span class="text-gray-800">${task.task}</span>
+                                                <span class="font-medium flex-shrink-0 ml-2 ${task.type === 'Revision' ? 'text-amber-700' : 'text-blue-700'}">${task.hours.toFixed(2)} hrs</span>
+                                            </li>
+                                        `).join('')}
+                                    </ul>` : '<p class="text-sm text-gray-400 italic">No tasks today.</p>'}
+                                </div>`;
+                        });
+                        html += `</div></div>`;
                     });
                     html += `</div></div>`;
                 });
@@ -268,27 +278,15 @@
 
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
-
             tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const tab = button.dataset.tab;
-                    switchTab(tab);
-                });
+                button.addEventListener('click', () => switchTab(button.dataset.tab));
             });
-
             function switchTab(tab) {
                  tabButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                    if (btn.dataset.tab === tab) {
-                        btn.classList.add('active');
-                    }
+                    btn.classList.toggle('active', btn.dataset.tab === tab);
                 });
-
                 tabContents.forEach(content => {
-                    content.classList.add('hidden');
-                    if (content.id === `${tab}-plan`) {
-                        content.classList.remove('hidden');
-                    }
+                    content.classList.toggle('hidden', content.id !== `${tab}-plan`);
                 });
             }
         });
