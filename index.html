@@ -253,11 +253,9 @@
             `;
         }
         
-        // --- THIS IS THE FIX: Added logic to highlight revision chapters ---
         function renderChapterList(chapters) {
             if (!chapters || chapters.length === 0) return '<li>-</li>';
             return chapters.map(chapter => {
-                // Check for the (Revision) tag and apply styling
                 const isRevision = chapter.includes('(Revision)');
                 const className = isRevision ? 'font-bold text-indigo-700' : 'text-gray-700';
                 return `<li class="${className}">${chapter}</li>`;
@@ -309,7 +307,8 @@
                                                 ${(dayData.tasks_by_subject[subject] || []).map(task => `
                                                     <li class="task-item p-2 rounded-md ${subjectColors[subject].border}">
                                                         <span class="text-gray-800">${task.task}</span>
-                                                        <span class="text-gray-500 font-medium float-right">${task.hours}h</span>
+                                                        <!-- THIS IS THE FIX: Convert hours to minutes -->
+                                                        <span class="text-gray-500 font-medium float-right">${Math.round(task.hours * 60)}min</span>
                                                     </li>
                                                 `).join('') || '<li class="text-sm text-gray-400">-</li>'}
                                             </ul>
