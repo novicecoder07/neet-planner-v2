@@ -4,36 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized NEET Study Planner</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>BeWise Classes - Personalized NEET Study Planner</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://www.bewiseclasses.com/images/1739968259App%20Icon%2096-96.png">
+    
+    <!-- Fonts and Icons from New Theme -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Bootstrap (from new theme) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Tailwind CSS (for original planner UI) -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles to apply new theme -->
     <style>
+        /* Base styles from new theme */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #f8fafc;
         }
+
+        /* --- Overrides for Planner UI --- */
+        #generate-btn {
+            background-color: #e9763f !important;
+            border-color: #e9763f !important;
+            color: #fff !important;
+        }
+        #generate-btn:hover {
+            background-color: #1c2c9f !important;
+            border-color: #1c2c9f !important;
+        }
+
         .plan-card {
             background-color: #ffffff;
             border-radius: 12px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease-in-out;
         }
+
         .tab-button {
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
         }
+
         .tab-button.active {
-            border-bottom-color: #4f46e5;
-            color: #4f46e5;
+            border-bottom-color: #1c2c9f;
+            color: #1c2c9f;
             font-weight: 600;
         }
+
         .subject-column h4 {
             border-bottom: 2px solid;
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
         }
+        
+        /* Subject specific colors from original theme (retained for clarity) */
         .physics-border { border-color: #3b82f6; }
         .chemistry-border { border-color: #10b981; }
         .biology-border { border-color: #ec4899; }
@@ -46,17 +73,102 @@
             background-color: #f9fafb;
             border-left: 3px solid;
         }
+
+        /* --- Styles for new Header/Footer --- */
+        .top-header-navbar {
+            background: #1c2c9f;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        .asdz-nav-link li a {
+            font-size: 13px;
+            padding: 0.7rem 1rem !important;
+            letter-spacing: 1px;
+            font-weight: 500;
+            color: #fff !important;
+        }
+        .asdz-nav-link li a:hover, .asdz-nav-link .nav-link.active {
+            background: #e9763f;
+            color: #fff !important;
+        }
+        .section-footer {
+            background-color: #f1f3f4;
+        }
+        .vjed-footer-link li a {
+            color: #555;
+            text-decoration: none;
+        }
+        .vjed-footer-link li a:hover {
+            color: #1c2c9f;
+        }
+        .c_link a {
+            text-decoration: none;
+            color: #333;
+        }
     </style>
 </head>
 
 <body class="flex flex-col min-h-screen">
-    <header class="bg-indigo-600 text-white p-4 text-center shadow-md">
-        <h1 class="text-3xl font-bold">Personalized NEET Study Planner</h1>
+    <!-- ===== START: New Header ===== -->
+    <header class="top-header-asd d-none d-md-block">
+        <div class="container">
+           <div class="row app-header d-flex align-items-center justify-content-between">
+              <div class="col-md-3">
+                 <div class=" header-logo d-flex align-items-center">
+                    <a class="logo" href="#">
+                       <img src="https://www.bewiseclasses.com/images/bewise-logo.png" alt="BeWise Classes" />
+                    </a>
+                 </div>
+              </div>
+              <div class="col-md-5 mission-header ">
+                <!-- Search bar removed for simplicity in this tool -->
+              </div>
+              <div class="col-md-4 header-asdz">
+                 <div class="mx-2 log log2 log3 d-flex gap-3 justify-content-end">
+                    <button type="button" class="btn login font-heading" onclick="location.href='#';"> <i class="fa-regular fa-user p-1"></i> Login</button>
+                    <button type="button" onclick="location.href='#'" class="btn login font-heading cart-btn">
+                       <img src="https://www.bewiseclasses.com/images/course-4.png" width="20">
+                    </button>
+                 </div>
+              </div>
+           </div>
+        </div>
     </header>
+    <div class="top-header-navbar">
+        <nav class="navbar navbar-expand-md navbar-light">
+           <div class="container">
+              <a class="navbar-brand d-md-none" href="#">
+                <img src="https://www.bewiseclasses.com/images/bewise-logo.png" alt="BeWise Logo" style="max-width: 120px; filter: brightness(0) invert(1);">
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+                 <ul class="navbar-nav asdz-nav-link">
+                    <li class="nav-item"> <a class="nav-link" href="#">Home</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">About</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">Updates</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">All Courses</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">Test Series</a> </li>
+                    <li class="nav-item"> <a class="nav-link active" href="#">Study Planner</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">Contact us</a> </li>
+                 </ul>
+              </div>
+           </div>
+        </nav>
+    </div>
+    <!-- ===== END: New Header ===== -->
 
     <main class="flex-grow container mx-auto p-4 flex flex-col items-center">
-        <div class="w-full max-w-4xl plan-card p-6 md:p-8 mt-8">
-            <h2 class="text-2xl font-semibold mb-6 text-gray-800">Generate Your Study Plan</h2>
+        <!-- The original planner form and UI starts here. No layout changes made. -->
+        <div class="w-full text-center my-6">
+             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Personalized NEET Study Planner</h1>
+             <p class="text-gray-600 mt-2">Craft your path to success. Fill in the details below to begin.</p>
+        </div>
+
+        <div class="w-full max-w-4xl plan-card p-6 md:p-8">
+            <h2 class="text-2xl font-semibold mb-6 text-gray-800 text-center">Generate Your Study Plan</h2>
             <form id="planner-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
@@ -95,7 +207,7 @@
                     </select>
                 </div>
                 <div class="md:col-span-2">
-                    <button type="submit" id="generate-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300 flex items-center justify-center">
+                    <button type="submit" id="generate-btn" class="w-full text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300 flex items-center justify-center">
                         <svg id="spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -106,23 +218,15 @@
             </form>
         </div>
 
-        <!-- Images section below the form -->
         <div class="mt-8 flex flex-col md:flex-row justify-center items-center gap-6 w-full max-w-4xl">
             <div class="w-full p-2 bg-gray-50 rounded-lg shadow-md max-w-sm">
-                <!-- URL Encoded Path -->
-                <img src="dream-batch.jpg" 
-                     alt="Dream Batch promotional banner" 
-                     class="w-full h-auto rounded-md">
+                <img src="dream-batch.jpg" alt="Dream Batch promotional banner" class="w-full h-auto rounded-md">
             </div>
             <div class="w-full p-2 bg-gray-50 rounded-lg shadow-md max-w-sm">
-                <!-- URL Encoded Path -->
-                <img src="beat-2026.png" 
-                     alt="Beat 2026 promotional banner" 
-                     class="w-full h-auto rounded-md">
+                <img src="beat-2026.jpg" alt="Beat 2026 promotional banner" class="w-full h-auto rounded-md">
             </div>
         </div>
 
-        <!-- Plan Display Area -->
         <div id="plan-display-area" class="w-full max-w-6xl mt-10 hidden">
             <div id="status-message" class="plan-card p-4 mb-6 text-center text-gray-700 font-medium"></div>
             
@@ -137,16 +241,81 @@
             <div id="daily-plan-content" class="tab-content hidden"></div>
         </div>
 
-        <!-- Error Message Area -->
         <div id="error-message-area" class="w-full max-w-4xl plan-card p-6 mt-8 hidden bg-red-50 border border-red-300">
             <p id="error-message" class="text-center text-red-700"></p>
         </div>
     </main>
 
-    <footer class="bg-gray-800 text-white text-center p-4 mt-8">
-        <p>&copy; 2025 Personalized Study Planner</p>
+    <!-- ===== START: New Footer ===== -->
+    <footer class="section-footer py-5 mt-8 border-t">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="footer-logo-img">
+                        <a class="fs-3" href="#">
+                            <img class="logo" src="https://www.bewiseclasses.com/images/bewise-logo.png" alt="logo" style="max-width: 150px;">
+                        </a>
+                    </div>
+                    <div class="footer-heading pt-3">
+                        <p class="my-3 fb text-muted"> At BeWise, we turn aspirants into achievers, making NEET preparation seamless and effective. </p>
+                    </div>
+                    <div class="footer-links text-center my-3">
+                        <ul class="list-inline mb-0 mt-3 list-unstyled d-flex">
+                            <li class="list-inline-item"> <a class="btn btn-sm" target="_blank" href="#"> <i class="fa-brands fa-facebook-f"></i> </a> </li>
+                            <li class="list-inline-item"> <a class="btn btn-sm" target="_blank" href="#"> <i class="fa-brands fa-instagram"></i> </a> </li>
+                            <li class="list-inline-item"> <a class="btn btn-sm" target="_blank" href="#"> <i class="fa-brands fa-twitter"></i> </a> </li>
+                            <li class="list-inline-item"> <a class="btn btn-sm" target="_blank" href="#"> <i class="fa-brands fa-youtube"></i> </a> </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row ">
+                        <div class="col-md-4 col-6 ">
+                            <h5 class=" text-dark m-3 " style="font-size: 22px;font-weight: 500;">Important Links</h5>
+                            <ul class="nav flex-column vjed-footer-link">
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> About Us </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> All Courses </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> Test Series </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> Books </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> Blogs </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> Contact Us </a> </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-6">
+                            <h5 class=" text-dark m-3" style="font-size: 22px;font-weight: 500;">Popular Courses</h5>
+                            <ul class="nav flex-column vjed-footer-link">
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> NEET 2026 Courses </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> NEET 2026 Test Series </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> NCERT based Course </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> FREE Study Material </a> </li>
+                                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa-solid fa-angle-right pe-1"></i> Class 12 Chemistry </a> </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <h5 class="mb-1 text-dark my-3" style="font-size: 22px;font-weight: 500;">Contact Us</h5>
+                            <div class="mt-3">
+                                <div class="c_link my-3"> <a href="tel:+917340250100" class="phone"><i class="fa fa-phone me-2" aria-hidden="true"></i>+917340250100</a> </div>
+                                <div class="c_link my-3"> <a href="mailto:care@bewiseclasses.com" class="envelope"><i class="fa fa-envelope me-2" aria-hidden="true"></i>care@bewiseclasses.com</a> </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </footer>
+    <div class="bg-dark py-2">
+        <div class="container px-0">
+            <div class="d-md-flex justify-content-center align-items-center text-center text-md-center">
+                <div class="text-white"> &copy; BeWise Classes - All Rights Reserved. </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== END: New Footer ===== -->
 
+    <!-- JS for Bootstrap Components -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Original Planner JavaScript (Unchanged) -->
     <script>
         // --- Global Config ---
         const API_URL = 'https://neet-planner-v2-46074891914.us-central1.run.app/generate_plan';
@@ -344,3 +513,4 @@
     </script>
 </body>
 </html>
+
