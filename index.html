@@ -156,21 +156,15 @@
         <div id="plan-display-area" class="w-full max-w-6xl mt-10 hidden">
             <div id="status-message" class="plan-card p-4 mb-6 text-center text-gray-700 font-medium"></div>
             
-            <div class="flex flex-wrap justify-center border-b border-gray-200 mb-6">
+            <div class="flex justify-center border-b border-gray-200 mb-6">
                 <button class="tab-button px-6 py-3 text-lg text-gray-500 active" data-tab="monthly">Monthly</button>
                 <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="weekly">Weekly</button>
                 <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="daily">Daily</button>
-                <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="books">Recommend Books</button>
-                <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="courses">Recommended Courses</button>
-                <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="teachers">Teachers</button>
             </div>
 
             <div id="monthly-plan-content" class="tab-content"></div>
             <div id="weekly-plan-content" class="tab-content hidden"></div>
             <div id="daily-plan-content" class="tab-content hidden"></div>
-            <div id="books-plan-content" class="tab-content hidden"></div>
-            <div id="courses-plan-content" class="tab-content hidden"></div>
-            <div id="teachers-plan-content" class="tab-content hidden"></div>
         </div>
 
         <!-- Error Message Area -->
@@ -281,16 +275,16 @@
                 const studentData = Object.fromEntries(formData.entries());
 
                 try {
-                    // MOCK API CALL - Replace with your actual fetch call
-                    const result = await new Promise(resolve => setTimeout(() => resolve({
-                        status: 'success',
-                        message: 'Successfully generated a sample plan.',
-                        plan: {
-                            monthly_plan: [{ month: "Month 1", chapters_by_subject: { Physics: ["Units & Measurements"], Chemistry: ["Some Basic Concepts"], Biology: ["The Living World"] }}],
-                            weekly_plan: [{ week: "Week 1", chapters_by_subject: { Physics: ["Units & Measurements"], Chemistry: ["Some Basic Concepts"], Biology: ["The Living World"] }}],
-                            daily_plan: [{ week: "Week 1", daily_breakdown: [{ day: "Monday", tasks_by_subject: { Physics: [{task: "Read Theory", hours: 2}], Chemistry: [{task: "Solve Problems", hours: 1.5}], Biology: [] }}]}]
-                        }
-                    }), 1500));
+                     const response = await fetch(API_URL, {
+                         method: 'POST',
+                         headers: { 'Content-Type': 'application/json' },
+                         body: JSON.stringify(studentData)
+                     });
+                     const result = await response.json();
+
+                     if (result.status !== 'success') {
+                         throw new Error(result.message || 'An unknown server error occurred.');
+                     }
                     
                     document.getElementById('status-message').textContent = result.message;
                     renderPlans(result.plan);
@@ -335,9 +329,6 @@
             renderMonthlyPlan(plan.monthly_plan);
             renderWeeklyPlan(plan.weekly_plan);
             renderDailyPlan(plan.daily_plan);
-            renderRecommendedBooks();
-            renderRecommendedCourses();
-            renderRecommendedTeachers();
         }
 
         function createSubjectColumn(subject, contentHtml) {
@@ -426,94 +417,6 @@
                     </div>
                 </div>
             `).join('');
-        }
-
-        function renderRecommendedBooks() {
-            const container = document.getElementById('books-plan-content');
-            const mockBooks = {
-                'Physics': [
-                    { title: 'Concepts of Physics', author: 'H.C. Verma' },
-                    { title: 'Fundamentals of Physics', author: 'Halliday, Resnick and Walker' },
-                ],
-                'Chemistry': [
-                    { title: 'Organic Chemistry', author: 'O.P. Tandon' },
-                    { title: 'Modern Approach to Chemical Calculations', author: 'R.C. Mukherjee' },
-                ],
-                'Biology': [
-                    { title: 'Objective Biology', author: 'Dinesh' },
-                    { title: 'Trueman\'s Biology Vol 1 & 2', author: 'Trueman' },
-                ]
-            };
-            
-            let contentHtml = '<div class="plan-card p-6 mb-8">';
-            contentHtml += '<h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Recommended Books</h3>';
-            contentHtml += '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
-            
-            for (const subject in mockBooks) {
-                const colors = subjectColors[subject];
-                contentHtml += `<div class="subject-column">`;
-                contentHtml += `<h4 class="text-lg font-semibold ${colors.text} ${colors.border}">${subject}</h4>`;
-                contentHtml += '<ul class="space-y-3">';
-                mockBooks[subject].forEach(book => {
-                    contentHtml += `<li class="text-gray-700"><span class="font-semibold">${book.title}</span><br><span class="text-sm text-gray-500">by ${book.author}</span></li>`;
-                });
-                contentHtml += '</ul></div>';
-            }
-
-            contentHtml += '</div></div>';
-            container.innerHTML = contentHtml;
-        }
-
-        function renderRecommendedCourses() {
-            const container = document.getElementById('courses-plan-content');
-            const mockCourses = [
-                { name: 'Physics Wallah (PW)', link: 'https://www.pw.live/' },
-                { name: 'Unacademy NEET UG', link: 'https://unacademy.com/goal/neet-ug/YOTUH' },
-                { name: 'Aakash Institute', link: 'https://www.aakash.ac.in/neet-coaching' },
-                { name: 'Allen Career Institute', link: 'https://www.allen.ac.in/medical-coaching' }
-            ];
-
-            let contentHtml = '<div class="plan-card p-6 mb-8">';
-            contentHtml += '<h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Recommended Courses</h3>';
-            contentHtml += '<div class="max-w-2xl mx-auto"><ul class="space-y-4">';
-
-            mockCourses.forEach(course => {
-                contentHtml += `
-                    <li class="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
-                        <a href="${course.link}" target="_blank" rel="noopener noreferrer" class="font-semibold text-brand-blue hover:underline">${course.name}</a>
-                    </li>
-                `;
-            });
-
-            contentHtml += '</ul></div></div>';
-            container.innerHTML = contentHtml;
-        }
-
-        function renderRecommendedTeachers() {
-            const container = document.getElementById('teachers-plan-content');
-            const mockTeachers = {
-                'Physics': ['Alakh Pandey (PW)', 'Nitin Vijay (Motion)'],
-                'Chemistry': ['V.K. Jaiswal', 'M.S. Chouhan'],
-                'Biology': ['Dr. N.K. Sharma', 'Tarun Kumar (Allen)']
-            };
-
-            let contentHtml = '<div class="plan-card p-6 mb-8">';
-            contentHtml += '<h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Top Teachers</h3>';
-            contentHtml += '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
-            
-            for (const subject in mockTeachers) {
-                const colors = subjectColors[subject];
-                contentHtml += `<div class="subject-column">`;
-                contentHtml += `<h4 class="text-lg font-semibold ${colors.text} ${colors.border}">${subject}</h4>`;
-                contentHtml += '<ul class="space-y-3">';
-                mockTeachers[subject].forEach(teacher => {
-                    contentHtml += `<li class="text-gray-700 font-medium">${teacher}</li>`;
-                });
-                contentHtml += '</ul></div>';
-            }
-
-            contentHtml += '</div></div>';
-            container.innerHTML = contentHtml;
         }
     </script>
 </body>
