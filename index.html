@@ -10,17 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #f8fafc;
         }
         .plan-card {
             background-color: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease-in-out;
         }
         .tab-button {
@@ -28,7 +25,7 @@
             border-bottom: 3px solid transparent;
         }
         .tab-button.active {
-            border-bottom-color: #4f46e5; /* indigo-600 */
+            border-bottom-color: #4f46e5;
             color: #4f46e5;
             font-weight: 600;
         }
@@ -37,35 +34,27 @@
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
         }
-        .physics-border { border-color: #3b82f6; } /* blue-500 */
-        .chemistry-border { border-color: #10b981; } /* emerald-500 */
-        .biology-border { border-color: #ec4899; } /* pink-500 */
+        .physics-border { border-color: #3b82f6; }
+        .chemistry-border { border-color: #10b981; }
+        .biology-border { border-color: #ec4899; }
         
         .physics-text { color: #3b82f6; }
         .chemistry-text { color: #10b981; }
         .biology-text { color: #ec4899; }
 
         .task-item {
-            background-color: #f9fafb; /* gray-50 */
-            border-left: 4px solid;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .task-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            background-color: #f9fafb;
+            border-left: 3px solid;
         }
     </style>
 </head>
 
 <body class="flex flex-col min-h-screen">
-    <!-- Header Section -->
     <header class="bg-indigo-600 text-white p-4 text-center shadow-md">
         <h1 class="text-3xl font-bold">Personalized NEET Study Planner</h1>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-grow container mx-auto p-4 flex flex-col items-center">
-        <!-- Form Card -->
         <div class="w-full max-w-4xl plan-card p-6 md:p-8 mt-8">
             <h2 class="text-2xl font-semibold mb-6 text-gray-800">Generate Your Study Plan</h2>
             <form id="planner-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -76,8 +65,8 @@
                 <div>
                     <label for="student_status" class="block text-sm font-medium text-gray-700 mb-1">Student Status</label>
                     <select id="student_status" name="student_status" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="11th">11th Grade</option>
-                        <option value="12th">12th Grade</option>
+                        <option value="11th">11th</option>
+                        <option value="12th">12th</option>
                         <option value="Dropper">Dropper</option>
                     </select>
                 </div>
@@ -96,7 +85,7 @@
                     </select>
                 </div>
                 <div class="md:col-span-2">
-                    <label for="hours_commitment" class="block text-sm font-medium text-gray-700 mb-1">Daily Study Hours</label>
+                    <label for="hours_commitment" class="block text-sm font-medium text-gray-700 mb-1">Daily Hours Commitment</label>
                     <select id="hours_commitment" name="hours_commitment" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         <option value="4">4 hours</option>
                         <option value="6">6 hours</option>
@@ -106,7 +95,7 @@
                     </select>
                 </div>
                 <div class="md:col-span-2">
-                    <button type="submit" id="generate-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-transform duration-300 transform hover:scale-105 flex items-center justify-center">
+                    <button type="submit" id="generate-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300 flex items-center justify-center">
                         <svg id="spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -117,19 +106,19 @@
             </form>
         </div>
 
-        <!-- Promotional Images Section -->
+        <!-- Images section below the form -->
         <div class="mt-8 flex flex-col md:flex-row justify-center items-center gap-6 w-full max-w-4xl">
             <div class="w-full p-2 bg-gray-50 rounded-lg shadow-md max-w-sm">
-                <img src="https://placehold.co/600x400/6366f1/ffffff?text=Dream+Batch" 
+                <!-- URL Encoded Path -->
+                <img src="dream-batch.jpg" 
                      alt="Dream Batch promotional banner" 
-                     class="w-full h-auto rounded-md"
-                     onerror="this.onerror=null;this.src='https://placehold.co/600x400/6366f1/ffffff?text=Image+Not+Found';">
+                     class="w-full h-auto rounded-md">
             </div>
             <div class="w-full p-2 bg-gray-50 rounded-lg shadow-md max-w-sm">
-                 <img src="https://placehold.co/600x400/ec4899/ffffff?text=Beat+2026" 
+                <!-- URL Encoded Path -->
+                <img src="beat-2026.jpg" 
                      alt="Beat 2026 promotional banner" 
-                     class="w-full h-auto rounded-md"
-                     onerror="this.onerror=null;this.src='https://placehold.co/600x400/ec4899/ffffff?text=Image+Not+Found';">
+                     class="w-full h-auto rounded-md">
             </div>
         </div>
 
@@ -137,7 +126,7 @@
         <div id="plan-display-area" class="w-full max-w-6xl mt-10 hidden">
             <div id="status-message" class="plan-card p-4 mb-6 text-center text-gray-700 font-medium"></div>
             
-            <div class="flex justify-center border-b border-gray-200 mb-6 sticky top-0 bg-white/80 backdrop-blur-sm z-10 py-2">
+            <div class="flex justify-center border-b border-gray-200 mb-6">
                 <button class="tab-button px-6 py-3 text-lg text-gray-500 active" data-tab="monthly">Monthly</button>
                 <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="weekly">Weekly</button>
                 <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="daily">Daily</button>
@@ -154,130 +143,87 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 text-white text-center p-4 mt-8">
         <p>&copy; 2025 Personalized Study Planner</p>
     </footer>
 
     <script>
-        // --- Mock API ---
-        // This function simulates a call to your backend.
-        // It returns a promise that resolves with a sample plan after a delay.
-        function mockApiCall(studentData) {
-            console.log("Generating plan for:", studentData);
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    // To test error handling, uncomment the next line
-                    // return reject(new Error("Mock API failed to generate the plan."));
+        // --- Global Config ---
+        const API_URL = 'https://neet-planner-v2-46074891914.us-central1.run.app/generate_plan';
 
-                    resolve({
-                        status: 'success',
-                        message: `Successfully generated a 6-month study plan for a ${studentData.student_status}.`,
-                        plan: {
-                            monthly_plan: [
-                                { month: "Month 1", chapters_by_subject: { Physics: ["Units and Measurements", "Motion in a Straight Line"], Chemistry: ["Some Basic Concepts of Chemistry"], Biology: ["The Living World", "Biological Classification (Revision)"] } },
-                                { month: "Month 2", chapters_by_subject: { Physics: ["Motion in a Plane"], Chemistry: ["Structure of Atom", "Classification of Elements"], Biology: ["Plant Kingdom", "Animal Kingdom"] } },
-                            ],
-                            weekly_plan: [
-                                { week: "Week 1", chapters_by_subject: { Physics: ["Units and Measurements"], Chemistry: ["Some Basic Concepts of Chemistry"], Biology: ["The Living World"] } },
-                                { week: "Week 2", chapters_by_subject: { Physics: ["Motion in a Straight Line"], Chemistry: [], Biology: ["Biological Classification (Revision)"] } },
-                            ],
-                            daily_plan: [
-                                {
-                                    week: "Week 1",
-                                    daily_breakdown: [
-                                        { day: "Monday", tasks_by_subject: { Physics: [{ task: "Theory: Dimensions", hours: 1.5 }], Chemistry: [{ task: "Practice: Mole Concept", hours: 2 }], Biology: [] } },
-                                        { day: "Tuesday", tasks_by_subject: { Physics: [], Chemistry: [{ task: "Revise: Atomic Structure", hours: 1 }], Biology: [{ task: "Study: Monera Kingdom", hours: 2.5 }] } },
-                                    ]
-                                }
-                            ]
-                        }
-                    });
-                }, 1500); // 1.5-second delay
-            });
-        }
-
-        // --- Main Application Logic ---
+        // --- Form Logic ---
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Element References ---
-            const plannerForm = document.getElementById('planner-form');
-            const generateBtn = document.getElementById('generate-btn');
-            const spinner = document.getElementById('spinner');
-            const btnText = document.getElementById('btn-text');
-            const planDisplayArea = document.getElementById('plan-display-area');
-            const errorMessageArea = document.getElementById('error-message-area');
             const startDateInput = document.getElementById('start_date');
             const weakSubjectSelect = document.getElementById('weak_subject');
             const strongSubjectSelect = document.getElementById('strong_subject');
+            const plannerForm = document.getElementById('planner-form');
 
-            // --- Initial Setup ---
+            const generateBtn = document.getElementById('generate-btn');
+            const spinner = document.getElementById('spinner');
+            const btnText = document.getElementById('btn-text');
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            startDateInput.value = `${yyyy}-${mm}-${dd}`;
+
             const allSubjects = ['Physics', 'Chemistry', 'Biology'];
             
-            // Set default start date to today
-            startDateInput.value = new Date().toISOString().split('T')[0];
-
-            // --- Functions ---
             function updateStrongSubjectOptions() {
                 const weakSubject = weakSubjectSelect.value;
                 strongSubjectSelect.innerHTML = '';
                 
-                allSubjects
-                    .filter(s => s !== weakSubject)
-                    .forEach(subject => {
-                        const option = document.createElement('option');
-                        option.value = subject;
-                        option.textContent = subject;
-                        strongSubjectSelect.appendChild(option);
-                    });
+                const remainingSubjects = allSubjects.filter(s => s !== weakSubject);
+                remainingSubjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    strongSubjectSelect.appendChild(option);
+                });
             }
-            
-            // --- Event Listeners ---
+
             weakSubjectSelect.addEventListener('change', updateStrongSubjectOptions);
-            
+            updateStrongSubjectOptions();
+
             plannerForm.addEventListener('submit', async function (event) {
                 event.preventDefault();
-                
-                // 1. Update UI to show loading state
                 btnText.textContent = 'Generating...';
                 spinner.classList.remove('hidden');
                 generateBtn.disabled = true;
-                planDisplayArea.classList.add('hidden');
-                errorMessageArea.classList.add('hidden');
+                document.getElementById('plan-display-area').classList.add('hidden');
+                document.getElementById('error-message-area').classList.add('hidden');
 
                 const formData = new FormData(event.target);
                 const studentData = Object.fromEntries(formData.entries());
 
                 try {
-                    // 2. Call the API (mocked for this demo)
-                    const result = await mockApiCall(studentData);
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(studentData)
+                    });
+                    const result = await response.json();
 
                     if (result.status !== 'success') {
                         throw new Error(result.message || 'An unknown server error occurred.');
                     }
                     
-                    // 3. Render the results
                     document.getElementById('status-message').textContent = result.message;
                     renderPlans(result.plan);
-                    planDisplayArea.classList.remove('hidden');
-                    
-                    // 4. Smoothly scroll to the plan
-                    setTimeout(() => {
-                        planDisplayArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
+                    document.getElementById('plan-display-area').classList.remove('hidden');
 
                 } catch (error) {
                     console.error('Error:', error);
                     document.getElementById('error-message').textContent = `Error: ${error.message}`;
-                    errorMessageArea.classList.remove('hidden');
+                    document.getElementById('error-message-area').classList.remove('hidden');
                 } finally {
-                    // 5. Reset UI from loading state
                     btnText.textContent = 'Generate Plan';
                     spinner.classList.add('hidden');
                     generateBtn.disabled = false;
                 }
             });
 
-            // Tab switching logic
             const tabs = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => {
@@ -286,13 +232,13 @@
                     tab.classList.add('active');
                     const targetTab = tab.getAttribute('data-tab');
                     tabContents.forEach(content => {
-                        content.classList.toggle('hidden', content.id !== `${targetTab}-plan-content`);
+                        content.classList.add('hidden');
+                        if (content.id === `${targetTab}-plan-content`) {
+                            content.classList.remove('hidden');
+                        }
                     });
                 });
             });
-
-            // --- Initial Call ---
-            updateStrongSubjectOptions();
         });
 
         // --- Rendering Logic ---
@@ -324,17 +270,13 @@
             if (!chapters || chapters.length === 0) return '<li>-</li>';
             return chapters.map(chapter => {
                 const isRevision = chapter.includes('(Revision)');
-                const className = isRevision ? 'font-semibold text-indigo-700' : 'text-gray-700';
+                const className = isRevision ? 'font-bold text-indigo-700' : 'text-gray-700';
                 return `<li class="${className}">${chapter}</li>`;
             }).join('');
         }
 
         function renderMonthlyPlan(monthlyPlan) {
             const container = document.getElementById('monthly-plan-content');
-            if(!monthlyPlan || monthlyPlan.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-500">No monthly plan available.</p>`;
-                return;
-            }
             container.innerHTML = monthlyPlan.map(monthData => `
                 <div class="plan-card p-6 mb-8">
                     <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">${monthData.month}</h3>
@@ -349,10 +291,6 @@
 
         function renderWeeklyPlan(weeklyPlan) {
             const container = document.getElementById('weekly-plan-content');
-            if(!weeklyPlan || weeklyPlan.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-500">No weekly plan available.</p>`;
-                return;
-            }
             container.innerHTML = weeklyPlan.map(weekData => `
                 <div class="plan-card p-6 mb-8">
                     <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">${weekData.week}</h3>
@@ -371,7 +309,7 @@
             }
             const colors = subjectColors[subject];
             return tasks.map(task => `
-                <li class="task-item p-3 rounded-md ${colors.border}">
+                <li class="task-item p-2 rounded-md ${colors.border}">
                     <span class="text-gray-800">${task.task}</span>
                     <span class="text-gray-500 font-medium float-right">${Math.round(task.hours * 60)}min</span>
                 </li>
@@ -380,10 +318,6 @@
 
         function renderDailyPlan(dailyPlan) {
             const container = document.getElementById('daily-plan-content');
-            if(!dailyPlan || dailyPlan.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-500">No daily plan available.</p>`;
-                return;
-            }
             container.innerHTML = dailyPlan.map(weekData => `
                 <div class="plan-card p-6 mb-8">
                     <h3 class="text-xl font-bold text-gray-900 mb-6">${weekData.week}</h3>
@@ -410,3 +344,4 @@
     </script>
 </body>
 </html>
+
