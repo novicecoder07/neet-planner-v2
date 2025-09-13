@@ -7,11 +7,27 @@
     <title>Personalized NEET Study Planner</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind theme to match the reference website's branding
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-blue': '#1c2c9f',
+                        'brand-orange': '#e9763f',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #f8fafc;
         }
         .plan-card {
@@ -25,8 +41,8 @@
             border-bottom: 3px solid transparent;
         }
         .tab-button.active {
-            border-bottom-color: #4f46e5;
-            color: #4f46e5;
+            border-bottom-color: #e9763f; /* brand-orange */
+            color: #e9763f; /* brand-orange */
             font-weight: 600;
         }
         .subject-column h4 {
@@ -50,9 +66,25 @@
 </head>
 
 <body class="flex flex-col min-h-screen">
-    <header class="bg-indigo-600 text-white p-4 text-center shadow-md">
-        <h1 class="text-3xl font-bold">Personalized NEET Study Planner</h1>
+    <!-- Header inspired by bewiseclasses.com -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#">
+                    <img src="https://www.bewiseclasses.com/images/bewise-logo.png" alt="Logo" class="h-10">
+                </a>
+            </div>
+            <div>
+                 <h1 class="text-xl md:text-2xl font-bold text-gray-800">NEET Study Planner</h1>
+            </div>
+        </div>
+        <nav class="bg-brand-blue">
+            <div class="container mx-auto px-4">
+                <p class="text-white text-center py-2 text-sm md:text-base">A Personalized Tool by BeWise Classes</p>
+            </div>
+        </nav>
     </header>
+
 
     <main class="flex-grow container mx-auto p-4 flex flex-col items-center">
         <div class="w-full max-w-4xl plan-card p-6 md:p-8 mt-8">
@@ -60,11 +92,11 @@
             <form id="planner-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                    <input type="date" id="start_date" name="start_date" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="date" id="start_date" name="start_date" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
                 </div>
                 <div>
                     <label for="student_status" class="block text-sm font-medium text-gray-700 mb-1">Student Status</label>
-                    <select id="student_status" name="student_status" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <select id="student_status" name="student_status" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
                         <option value="11th">11th</option>
                         <option value="12th">12th</option>
                         <option value="Dropper">Dropper</option>
@@ -72,7 +104,7 @@
                 </div>
                 <div>
                     <label for="weak_subject" class="block text-sm font-medium text-gray-700 mb-1">Weakest Subject</label>
-                    <select id="weak_subject" name="weak_subject" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <select id="weak_subject" name="weak_subject" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
                         <option value="Physics">Physics</option>
                         <option value="Chemistry">Chemistry</option>
                         <option value="Biology">Biology</option>
@@ -80,13 +112,13 @@
                 </div>
                 <div>
                     <label for="strong_subject" class="block text-sm font-medium text-gray-700 mb-1">Strongest Subject</label>
-                    <select id="strong_subject" name="strong_subject" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <select id="strong_subject" name="strong_subject" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
                         <!-- Options will be populated by JavaScript -->
                     </select>
                 </div>
                 <div class="md:col-span-2">
                     <label for="hours_commitment" class="block text-sm font-medium text-gray-700 mb-1">Daily Hours Commitment</label>
-                    <select id="hours_commitment" name="hours_commitment" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <select id="hours_commitment" name="hours_commitment" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
                         <option value="4">4 hours</option>
                         <option value="6">6 hours</option>
                         <option value="8" selected>8 hours</option>
@@ -95,7 +127,7 @@
                     </select>
                 </div>
                 <div class="md:col-span-2">
-                    <button type="submit" id="generate-btn" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300 flex items-center justify-center">
+                    <button type="submit" id="generate-btn" class="w-full bg-brand-orange text-white font-bold py-3 px-4 rounded-md hover:bg-brand-blue focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2 transition-colors duration-300 flex items-center justify-center">
                         <svg id="spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -109,14 +141,12 @@
         <!-- Images section below the form -->
         <div class="mt-8 flex flex-col md:flex-row justify-center items-center gap-6 w-full max-w-4xl">
             <div class="w-full p-2 bg-gray-50 rounded-lg shadow-md max-w-sm">
-                <!-- URL Encoded Path -->
-                <img src="dream-batch.jpg" 
+                <img src="https://placehold.co/600x400/1c2c9f/ffffff?text=Dream+Batch" 
                      alt="Dream Batch promotional banner" 
                      class="w-full h-auto rounded-md">
             </div>
             <div class="w-full p-2 bg-gray-50 rounded-lg shadow-md max-w-sm">
-                <!-- URL Encoded Path -->
-                <img src="beat-2026.jpg" 
+                <img src="https://placehold.co/600x400/e9763f/ffffff?text=Beat+2026" 
                      alt="Beat 2026 promotional banner" 
                      class="w-full h-auto rounded-md">
             </div>
@@ -126,15 +156,21 @@
         <div id="plan-display-area" class="w-full max-w-6xl mt-10 hidden">
             <div id="status-message" class="plan-card p-4 mb-6 text-center text-gray-700 font-medium"></div>
             
-            <div class="flex justify-center border-b border-gray-200 mb-6">
+            <div class="flex flex-wrap justify-center border-b border-gray-200 mb-6">
                 <button class="tab-button px-6 py-3 text-lg text-gray-500 active" data-tab="monthly">Monthly</button>
                 <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="weekly">Weekly</button>
                 <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="daily">Daily</button>
+                <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="books">Recommend Books</button>
+                <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="courses">Recommended Courses</button>
+                <button class="tab-button px-6 py-3 text-lg text-gray-500" data-tab="teachers">Teachers</button>
             </div>
 
             <div id="monthly-plan-content" class="tab-content"></div>
             <div id="weekly-plan-content" class="tab-content hidden"></div>
             <div id="daily-plan-content" class="tab-content hidden"></div>
+            <div id="books-plan-content" class="tab-content hidden"></div>
+            <div id="courses-plan-content" class="tab-content hidden"></div>
+            <div id="teachers-plan-content" class="tab-content hidden"></div>
         </div>
 
         <!-- Error Message Area -->
@@ -143,9 +179,56 @@
         </div>
     </main>
 
-    <footer class="bg-gray-800 text-white text-center p-4 mt-8">
-        <p>&copy; 2025 Personalized Study Planner</p>
+    <!-- Footer inspired by bewiseclasses.com -->
+    <footer class="bg-gray-50 pt-12 mt-8 border-t">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <div class="md:col-span-4">
+                    <img src="https://www.bewiseclasses.com/images/bewise-logo.png" alt="BeWise Logo" class="h-10 mb-4">
+                    <h4 class="text-lg font-semibold">About Us</h4>
+                    <p class="my-3 text-gray-600">
+                        At BeWise, we turn aspirants into achievers, making NEET preparation seamless and effective. This planner is a tool to help you on your journey.
+                    </p>
+                </div>
+                <div class="md:col-span-8">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h5 class="text-gray-800 text-lg font-semibold">Important Links</h5>
+                            <ul class="nav flex-column mt-3 space-y-2">
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">About Us</a></li>
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">All Courses</a></li>
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">Blogs</a></li>
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">Contact Us</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="text-gray-800 text-lg font-semibold">Popular Courses</h5>
+                            <ul class="nav flex-column mt-3 space-y-2">
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">NEET 2026 Courses</a></li>
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">NEET 2027 Courses</a></li>
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">Class 12 Chemistry</a></li>
+                                <li><a class="text-gray-600 hover:text-brand-blue" href="#">Class 11 Chemistry</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="text-gray-800 text-lg font-semibold">Contact Us</h5>
+                            <ul class="nav flex-column mt-3 space-y-2 text-gray-600">
+                                <li>Address: Kota - 324008</li>
+                                <li><a href="#" class="hover:text-brand-blue">+917340250100</a></li>
+                                <li><a href="#" class="hover:text-brand-blue">care@bewiseclasses.com</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-800 py-3 mt-8">
+            <div class="container mx-auto px-4 text-center text-gray-300 text-sm">
+                &copy; BeWise Classes - All Rights Reserved.
+            </div>
+        </div>
     </footer>
+
 
     <script>
         // --- Global Config ---
@@ -198,16 +281,16 @@
                 const studentData = Object.fromEntries(formData.entries());
 
                 try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(studentData)
-                    });
-                    const result = await response.json();
-
-                    if (result.status !== 'success') {
-                        throw new Error(result.message || 'An unknown server error occurred.');
-                    }
+                    // MOCK API CALL - Replace with your actual fetch call
+                    const result = await new Promise(resolve => setTimeout(() => resolve({
+                        status: 'success',
+                        message: 'Successfully generated a sample plan.',
+                        plan: {
+                            monthly_plan: [{ month: "Month 1", chapters_by_subject: { Physics: ["Units & Measurements"], Chemistry: ["Some Basic Concepts"], Biology: ["The Living World"] }}],
+                            weekly_plan: [{ week: "Week 1", chapters_by_subject: { Physics: ["Units & Measurements"], Chemistry: ["Some Basic Concepts"], Biology: ["The Living World"] }}],
+                            daily_plan: [{ week: "Week 1", daily_breakdown: [{ day: "Monday", tasks_by_subject: { Physics: [{task: "Read Theory", hours: 2}], Chemistry: [{task: "Solve Problems", hours: 1.5}], Biology: [] }}]}]
+                        }
+                    }), 1500));
                     
                     document.getElementById('status-message').textContent = result.message;
                     renderPlans(result.plan);
@@ -252,6 +335,9 @@
             renderMonthlyPlan(plan.monthly_plan);
             renderWeeklyPlan(plan.weekly_plan);
             renderDailyPlan(plan.daily_plan);
+            renderRecommendedBooks();
+            renderRecommendedCourses();
+            renderRecommendedTeachers();
         }
 
         function createSubjectColumn(subject, contentHtml) {
@@ -270,7 +356,7 @@
             if (!chapters || chapters.length === 0) return '<li>-</li>';
             return chapters.map(chapter => {
                 const isRevision = chapter.includes('(Revision)');
-                const className = isRevision ? 'font-bold text-indigo-700' : 'text-gray-700';
+                const className = isRevision ? 'font-bold text-brand-blue' : 'text-gray-700';
                 return `<li class="${className}">${chapter}</li>`;
             }).join('');
         }
@@ -324,7 +410,7 @@
                     <div class="space-y-6">
                         ${weekData.daily_breakdown.map(dayData => `
                             <div>
-                                <h4 class="text-lg font-semibold text-indigo-600 mb-4 pb-2 border-b border-gray-200">${dayData.day}</h4>
+                                <h4 class="text-lg font-semibold text-brand-blue mb-4 pb-2 border-b border-gray-200">${dayData.day}</h4>
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                                     ${Object.keys(subjectColors).map(subject => `
                                         <div>
@@ -340,6 +426,94 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function renderRecommendedBooks() {
+            const container = document.getElementById('books-plan-content');
+            const mockBooks = {
+                'Physics': [
+                    { title: 'Concepts of Physics', author: 'H.C. Verma' },
+                    { title: 'Fundamentals of Physics', author: 'Halliday, Resnick and Walker' },
+                ],
+                'Chemistry': [
+                    { title: 'Organic Chemistry', author: 'O.P. Tandon' },
+                    { title: 'Modern Approach to Chemical Calculations', author: 'R.C. Mukherjee' },
+                ],
+                'Biology': [
+                    { title: 'Objective Biology', author: 'Dinesh' },
+                    { title: 'Trueman\'s Biology Vol 1 & 2', author: 'Trueman' },
+                ]
+            };
+            
+            let contentHtml = '<div class="plan-card p-6 mb-8">';
+            contentHtml += '<h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Recommended Books</h3>';
+            contentHtml += '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
+            
+            for (const subject in mockBooks) {
+                const colors = subjectColors[subject];
+                contentHtml += `<div class="subject-column">`;
+                contentHtml += `<h4 class="text-lg font-semibold ${colors.text} ${colors.border}">${subject}</h4>`;
+                contentHtml += '<ul class="space-y-3">';
+                mockBooks[subject].forEach(book => {
+                    contentHtml += `<li class="text-gray-700"><span class="font-semibold">${book.title}</span><br><span class="text-sm text-gray-500">by ${book.author}</span></li>`;
+                });
+                contentHtml += '</ul></div>';
+            }
+
+            contentHtml += '</div></div>';
+            container.innerHTML = contentHtml;
+        }
+
+        function renderRecommendedCourses() {
+            const container = document.getElementById('courses-plan-content');
+            const mockCourses = [
+                { name: 'Physics Wallah (PW)', link: 'https://www.pw.live/' },
+                { name: 'Unacademy NEET UG', link: 'https://unacademy.com/goal/neet-ug/YOTUH' },
+                { name: 'Aakash Institute', link: 'https://www.aakash.ac.in/neet-coaching' },
+                { name: 'Allen Career Institute', link: 'https://www.allen.ac.in/medical-coaching' }
+            ];
+
+            let contentHtml = '<div class="plan-card p-6 mb-8">';
+            contentHtml += '<h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Recommended Courses</h3>';
+            contentHtml += '<div class="max-w-2xl mx-auto"><ul class="space-y-4">';
+
+            mockCourses.forEach(course => {
+                contentHtml += `
+                    <li class="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                        <a href="${course.link}" target="_blank" rel="noopener noreferrer" class="font-semibold text-brand-blue hover:underline">${course.name}</a>
+                    </li>
+                `;
+            });
+
+            contentHtml += '</ul></div></div>';
+            container.innerHTML = contentHtml;
+        }
+
+        function renderRecommendedTeachers() {
+            const container = document.getElementById('teachers-plan-content');
+            const mockTeachers = {
+                'Physics': ['Alakh Pandey (PW)', 'Nitin Vijay (Motion)'],
+                'Chemistry': ['V.K. Jaiswal', 'M.S. Chouhan'],
+                'Biology': ['Dr. N.K. Sharma', 'Tarun Kumar (Allen)']
+            };
+
+            let contentHtml = '<div class="plan-card p-6 mb-8">';
+            contentHtml += '<h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Top Teachers</h3>';
+            contentHtml += '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
+            
+            for (const subject in mockTeachers) {
+                const colors = subjectColors[subject];
+                contentHtml += `<div class="subject-column">`;
+                contentHtml += `<h4 class="text-lg font-semibold ${colors.text} ${colors.border}">${subject}</h4>`;
+                contentHtml += '<ul class="space-y-3">';
+                mockTeachers[subject].forEach(teacher => {
+                    contentHtml += `<li class="text-gray-700 font-medium">${teacher}</li>`;
+                });
+                contentHtml += '</ul></div>';
+            }
+
+            contentHtml += '</div></div>';
+            container.innerHTML = contentHtml;
         }
     </script>
 </body>
